@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة تقييم وتطوير أنظمة النوادي الرياضية - Apexis Code</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .input-modern {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .input-modern:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+        .logo-glow {
+            filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.3));
+            transition: transform 0.3s ease;
+        }
+        .logo-glow:hover {
+            transform: scale(1.03);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-blue-500 selection:text-white pb-16">
+    
+    <!-- Background Glow Effects -->
+    <div class="fixed top-0 left-1/4 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <div class="max-w-4xl mx-auto px-4 pt-8 relative z-10">
+        
+        <!-- Header with Logo Only -->
+        <header class="text-center mb-8 glass-card p-6 md:p-8 rounded-3xl shadow-2xl relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-blue-500/5 to-transparent pointer-events-none"></div>
+            
+            <!-- Logo Section (Double click for Owner Dashboard) -->
+            <div class="flex flex-col items-center justify-center mb-3">
+                <div title="انقر نقراً مزدوجاً لفتح لوحة تحكم المالك 🔒" 
+                     ondblclick="checkOwnerAccess()" 
+                     class="cursor-pointer group relative">
+                    <div class="absolute -inset-2 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-30 group-hover:opacity-70 transition duration-300"></div>
+                    <img src="Apexis Code Monogram Logo.png" alt="Apexis Code Logo" class="relative w-24 h-24 md:w-32 md:h-32 object-contain rounded-2xl logo-glow">
+                </div>
+            </div>
+
+            <h1 class="text-2xl md:text-3xl font-black tracking-tight text-white mb-1.5">منصة تقييم وتطوير أنظمة النوادي</h1>
+            <p class="text-slate-400 text-xs md:text-sm max-w-lg mx-auto">تطوير حلول برمجية ذكية مخصصة خصيصاً للقضاء على متاعب وعقبات إدارة الجيم اليومية</p>
+        </header>
+
+        <!-- VIEW 1: SURVEY FORM (10 QUESTIONS) -->
+        <section id="surveySection" class="glass-card p-5 md:p-10 rounded-3xl shadow-2xl">
+            <div class="flex items-center gap-4 border-b border-slate-800/80 pb-6 mb-8">
+                <div class="w-12 h-12 rounded-2xl bg-blue-600/10 text-blue-400 flex items-center justify-center font-bold text-xl border border-blue-500/20 shrink-0">📋</div>
+                <div>
+                    <h2 class="text-lg md:text-2xl font-black text-white">استمارة تحليل وتحديد التحديات اليومية</h2>
+                    <p class="text-xs md:text-sm text-slate-400 mt-0.5">بإمكانك الإجابة عما تحب من الأسئلة التالية لنفهم طبيعة العمل في ناديك</p>
+                </div>
+            </div>
+
+            <form id="gymForm" onsubmit="submitSurvey(event)" class="space-y-6">
+                <!-- Basic Info Card -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5 bg-slate-900/60 p-5 rounded-2xl border border-slate-800">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-2 uppercase tracking-wider">اسم الجيم *</label>
+                        <input type="text" id="gymName" required class="w-full input-modern rounded-xl px-4 py-3 text-white text-sm focus:outline-none" placeholder="مثال: أكسجين جيم">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-2 uppercase tracking-wider">اسم المالك / المدير *</label>
+                        <input type="text" id="ownerName" required class="w-full input-modern rounded-xl px-4 py-3 text-white text-sm focus:outline-none" placeholder="مثال: أحمد العمري">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-2 uppercase tracking-wider">رقم الهاتف / واتساب *</label>
+                        <input type="tel" id="phoneNumber" required 
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
+                               maxlength="15"
+                               class="w-full input-modern rounded-xl px-4 py-3 text-white text-sm focus:outline-none" 
+                               placeholder="07XXXXXXXX">
+                    </div>
+                </div>
+
+                <!-- 10 Detailed Questions (Not Required) -->
+                <div class="space-y-5">
+                    <div class="bg-slate-900/40 p-4 md:p-5 rounded-2xl border border-slate-800/80 transition hover:border-blue-500/30">
+                        <label class="block text-sm font-bold text-blue-400 mb-2 leading-relaxed">1. ما هو أكثر شيء "يغلبك" أو يستنزف وقتك وجهدك يومياً في إدارة النادي بشكل عام؟</label>
+                        <textarea id="q1" rows="3" class="w-full input-modern rounded-xl px-4 py-3 text-white text-sm focus:outline-none" placeholder="اكتب تفاصيل التعب اليومي الأكبر..."></textarea>
+                    </div>
+
+                    <div class="bg-slate-900/40 p-4 md:p-5 rounded-2xl border border-slate-800/80">
+                        <label class="block text-sm font-bold text-slate-200 mb-2 leading-relaxed">2. ما هي أبرز عقبات تسجيل اللاعبين الجدد ومتابعة تواريخ انتهاء اشتراكاتهم؟</label>
+                        <textarea id="q2" rows="3" class="w-full input-modern rounded-xl px-4 py-3 text-white text-sm focus:outline-none" placeholder="مثل: دخول لاعبين منتهية اشتراكاتهم بالخطأ، ضياع الدفاتر..."></textarea>
+                    </div>
+
+                    <div class="bg-slate-900/40 p-4 md:p-5 rounded-2xl border border-slate-800/80">
+                        <label class="block text-sm font-bold text-slate-200 mb-2 leading-relaxed">3. كيف تتعامل مع مشكلة "الديون والاشتراكات المؤجلة" للاعبين الذين لا يدفعون فوراً؟</label>
+                        <textarea id="q3" rows="3" class="w-full input-modern rounded-xl px-4 py-3 text-white text-sm focus:outline-none" placeholder="مثل: ننسى من عليه مبالغ مالية، لا يوجد نظام تذكير للمتأخرات..."></textarea>
+                    </div>
+
+                    <div class="bg-slate-900/40 p-4 md:p-5 rounded-2xl border border-slate-800/80">
+                        <label class="block text-sm font-bold text-slate-200 mb-2 leading-relaxed">4. ما مدى صعوبة حساب رواتب الموظفين، المدربين، والنسب الخاصة بهم بدقة؟</label>
+                        <textarea id="q4" rows="3" class="w-full input-modern rounded-xl px-4 py-3 text-white text-sm focus:outline-none" placeholder="مثل: احتساب نسب الحصص الخاصة، السلف، والخصومات الشهرية..."></textarea>
+                    </div>
+
+                    <div class="bg-slate-900/40 p-4 md:p-5 rounded-2xl border border-slate-800/80">
+                        <label class="block text-sm font-bold text-slate-200 mb-2 leading-relaxed">5. هل تواجهون مشاكل في مراقبة حركة الصندوق، المصروفات النثرية، والإيرادات اليومية؟</label>
+                        <textarea id="q5" rows="3" class="w-full input-modern rounded-xl px-4 py-3 text-white text-sm focus:outline-none" placeholder="مثل: الفلوس تدخل وتطلع وبنهاية اليوم الصندوق لا يطابق الواقع..."></textarea>
+                    </div>
+
+                    <div class="bg-slate-900/40 p-4 md:p-5 rounded-2xl border border-slate-800/80">
+                        <label class="block text-sm font-bold text-slate-200 mb-2 leading-relaxed">6. كيف يتم حالياً تنظيم "حصص التدريب الشخصي (Personal Training)" وجداول المدربين؟</label>
+                        <textarea id="q6" rows="3" class="w-full input-modern rounded-xl px-4 py-3 text-white text-sm focus:outline-none" placeholder="مثل: تداخل المواعيد، نسيان عدد الحصص المتبقية للاعب المشترك..."></textarea>
+                    </div>
+
+                    <div class="bg-slate-900/40 p-4 md:p-5 rounded-2xl border border-slate-800/80">
+                        <label class="block text-sm font-bold text-slate-200 mb-2 leading-relaxed">7. هل تعاني من فوضى بيع المكملات الغذائية، المشروبات، أو أدوات النادي وجرد مستودعها؟</label>
+                        <textarea id="q7" rows="3" class="w-full input-modern rounded-xl px-4 py-3 text-white text-sm focus:outline-none" placeholder="مثل: نقص البضاعة بدون ما ندري، ضياع حسابات الكافيه داخل الجيم..."></textarea>
+                    </div>
+
+                    <div class="bg-slate-900/40 p-4 md:p-5 rounded-2xl border border-slate-800/80">
+                        <label class="block text-sm font-bold text-slate-200 mb-2 leading-relaxed">8. ما هي المشاكل المتعلقة بضبط حضور وانصراف الموظفين ومتابعة شفتات العمل الليلية أو الصباحية؟</label>
+                        <textarea id="q8" rows="3" class="w-full input-modern rounded-xl px-4 py-3 text-white text-sm focus:outline-none" placeholder="مثل: التأخير عن الدوام، التخربط في تسليم الشفت بين الموظفين..."></textarea>
+                    </div>
+
+                    <div class="bg-slate-900/40 p-4 md:p-5 rounded-2xl border border-slate-800/80">
+                        <label class="block text-sm font-bold text-slate-200 mb-2 leading-relaxed">9. كيف تقيّم صعوبة معرفة "صافي الأرباح الحقيقي" في نهاية الشهر بعد خصم كافة المصاريف؟</label>
+                        <textarea id="q9" rows="3" class="w-full input-modern rounded-xl px-4 py-3 text-white text-sm focus:outline-none" placeholder="مثل: لا نعرف هل النادي يربح أم يغطي تكاليف فقط بشكل دقيق..."></textarea>
+                    </div>
+
+                    <div class="bg-slate-900/40 p-4 md:p-5 rounded-2xl border border-slate-800/80">
+                        <label class="block text-sm font-bold text-slate-200 mb-2 leading-relaxed">10. برأيك، ما هي الميزة الأهم التي تنتظرها بفارغ الصبر في النظام البرمجي القادم لتريح بالك تماماً؟</label>
+                        <textarea id="q10" rows="3" class="w-full input-modern rounded-xl px-4 py-3 text-white text-sm focus:outline-none" placeholder="مثل: تطبيق موبايل للمالك، نظام باركود سريع، تقارير مالية آلية..."></textarea>
+                    </div>
+                </div>
+
+                <div class="pt-4 text-center">
+                    <button type="submit" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black px-12 py-4 rounded-2xl shadow-xl shadow-blue-600/25 w-full md:w-auto text-base transition-all hover:scale-[1.02] active:scale-95">
+                        إرسال الاستبيان الشامل وحفظ البيانات 🚀
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- VIEW 2: OWNER ADMIN DASHBOARD (PROTECTED) -->
+        <section id="ownerSection" class="hidden space-y-6">
+            <div class="glass-card p-6 md:p-8 rounded-3xl shadow-2xl flex flex-col md:flex-row justify-between items-center gap-5 border border-slate-800">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-600/10 text-blue-400 flex items-center justify-center font-bold text-xl border border-blue-500/20">🛡️</div>
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-black text-white">لوحة تحكم المالك (Apexis Code)</h2>
+                        <p class="text-xs md:text-sm text-slate-400 mt-0.5">استعراض تقارير النوادي والبيانات الواردة من استبيان الـ 10 أسئلة</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+                    <span class="bg-slate-900/80 border border-slate-800 px-4 py-2.5 rounded-2xl text-xs font-bold text-slate-300">النوادي المسجلة: <strong id="totalCount" class="text-blue-400 text-sm">0</strong></span>
+                    <button onclick="lockOwnerDashboard()" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 px-4 py-2.5 rounded-2xl text-xs font-bold transition">قفل اللوحة ✕</button>
+                </div>
+            </div>
+
+            <div id="gymsCardsContainer" class="grid grid-cols-1 gap-4">
+                <!-- Dynamic Cards -->
+            </div>
+        </section>
+    </div>
+
+    <!-- MODAL FOR DETAILED VIEW & PDF EXPORT -->
+    <div id="reportModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 text-slate-100 border border-slate-800 w-full max-w-2xl rounded-3xl p-6 md:p-8 relative max-h-[90vh] overflow-y-auto shadow-2xl">
+            
+            <!-- PRINTABLE AREA (STYLIZED PDF LAYOUT) -->
+            <div id="printableArea" style="background-color: #0f172a; color: #f8fafc; padding: 24px; border-radius: 16px; font-family: 'Cairo', sans-serif;">
+                <div style="border-bottom: 2px solid #3b82f6; padding-bottom: 16px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <span style="font-size: 11px; font-weight: bold; color: #3b82f6; background: rgba(59, 130, 246, 0.1); padding: 4px 10px; border-radius: 20px;">تقرير تحليلي رسمي - Apexis Code</span>
+                        <h2 style="font-size: 22px; font-weight: 900; margin: 8px 0 0 0; color: #ffffff;" id="modalGymName">اسم الجيم</h2>
+                    </div>
+                    <div style="text-align: left; font-size: 11px; color: #94a3b8;">
+                        <div>تاريخ التقرير:</div>
+                        <div id="modalDate" style="font-weight: bold; color: #e2e8f0;"></div>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: rgba(30, 41, 59, 0.6); padding: 12px 16px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.05); font-size: 13px;">
+                    <div><strong style="color: #94a3b8;">المالك/المدير:</strong> <span id="modalOwnerName" style="color: #ffffff; font-weight: 600;"></span></div>
+                    <div><strong style="color: #94a3b8;">رقم الهاتف:</strong> <span id="modalPhone" style="color: #ffffff; font-weight: 600;"></span></div>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 12px; font-size: 12px;" id="modalQuestionsContainer">
+                    <!-- Dynamically populated questions (hidden if empty) -->
+                </div>
+            </div>
+
+            <!-- MODAL ACTION BUTTONS -->
+            <div class="mt-8 flex flex-wrap justify-end gap-3 pt-4 border-t border-slate-800">
+                <button onclick="downloadSinglePDF()" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-blue-600/20 transition flex items-center gap-2"><span>📥</span> تحميل التقرير PDF</button>
+                <button onclick="closeModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-5 py-3 rounded-2xl font-bold transition">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const OWNER_PASSWORD = "123"; 
+        let currentActiveGym = null;
+
+        const questionsList = [
+            { id: 'q1', label: '1. ما هو أكثر شيء "يغلبك" أو يستنزف وقتك وجهدك يومياً في إدارة النادي بشكل عام؟' },
+            { id: 'q2', label: '2. ما هي أبرز عقبات تسجيل اللاعبين الجدد ومتابعة تواريخ انتهاء اشتراكاتهم؟' },
+            { id: 'q3', label: '3. كيف تتعامل مع مشكلة "الديون والاشتراكات المؤجلة" للاعبين الذين لا يدفعون فوراً؟' },
+            { id: 'q4', label: '4. ما مدى صعوبة حساب رواتب الموظفين، المدربين، والنسب الخاصة بهم بدقة؟' },
+            { id: 'q5', label: '5. هل تواجهون مشاكل في مراقبة حركة الصندوق، المصروفات النثرية، والإيرادات اليومية؟' },
+            { id: 'q6', label: '6. كيف يتم حالياً تنظيم "حصص التدريب الشخصي (Personal Training)" وجداول المدربين؟' },
+            { id: 'q7', label: '7. هل تعاني من فوضى بيع المكملات الغذائية، المشروبات، أو أدوات النادي وجرد مستودعها؟' },
+            { id: 'q8', label: '8. ما هي المشاكل المتعلقة بضبط حضور وانصراف الموظفين ومتابعة شفتات العمل الليلية أو الصباحية؟' },
+            { id: 'q9', label: '9. كيف تقيّم صعوبة معرفة "صافي الأرباح الحقيقي" في نهاية الشهر بعد خصم كافة المصاريف؟' },
+            { id: 'q10', label: '10. برأيك، ما هي الميزة الأهم التي تنتظرها بفارغ الصبر في النظام البرمجي القادم لتريح بالك تماماً؟' }
+        ];
+
+        function switchView(view) {
+            const surveySec = document.getElementById('surveySection');
+            const ownerSec = document.getElementById('ownerSection');
+
+            if(view === 'survey') {
+                surveySec.classList.remove('hidden');
+                ownerSec.classList.add('hidden');
+            } else {
+                surveySec.classList.add('hidden');
+                ownerSec.classList.remove('hidden');
+                renderOwnerDashboard();
+            }
+        }
+
+        function checkOwnerAccess() {
+            let pass = prompt("الرجاء إدخال كلمة مرور لوحة تحكم المالك:");
+            if(pass === OWNER_PASSWORD) {
+                switchView('owner');
+            } else if(pass !== null) {
+                alert("كلمة المرور غير صحيحة!");
+            }
+        }
+
+        function lockOwnerDashboard() {
+            switchView('survey');
+        }
+
+        function getStoredGyms() {
+            let data = localStorage.getItem('gyms_10_questions_survey');
+            return data ? JSON.parse(data) : [];
+        }
+
+        function submitSurvey(e) {
+            e.preventDefault();
+            const gymRecord = {
+                id: 'gym_' + Date.now(),
+                gymName: document.getElementById('gymName').value,
+                ownerName: document.getElementById('ownerName').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                q1: document.getElementById('q1').value.trim(),
+                q2: document.getElementById('q2').value.trim(),
+                q3: document.getElementById('q3').value.trim(),
+                q4: document.getElementById('q4').value.trim(),
+                q5: document.getElementById('q5').value.trim(),
+                q6: document.getElementById('q6').value.trim(),
+                q7: document.getElementById('q7').value.trim(),
+                q8: document.getElementById('q8').value.trim(),
+                q9: document.getElementById('q9').value.trim(),
+                q10: document.getElementById('q10').value.trim(),
+                date: new Date().toLocaleDateString('ar-JO', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+            };
+
+            let gyms = getStoredGyms();
+            gyms.push(gymRecord);
+            localStorage.setItem('gyms_10_questions_survey', JSON.stringify(gyms));
+
+            document.getElementById('gymForm').reset();
+            alert('تم إرسال الاستبيان الشامل بنجاح! شكراً لمشاركتك.');
+        }
+
+        function renderOwnerDashboard() {
+            let gyms = getStoredGyms();
+            document.getElementById('totalCount').innerText = gyms.length;
+            const container = document.getElementById('gymsCardsContainer');
+
+            if(gyms.length === 0) {
+                container.innerHTML = `<div class="text-center py-16 glass-card rounded-3xl border border-slate-800 text-slate-400">لا توجد أي استبيانات مسجلة حتى الآن من النوادي.</div>`;
+                return;
+            }
+
+            container.innerHTML = gyms.map((g, index) => `
+                <div class="glass-card p-6 rounded-3xl border border-slate-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition hover:border-blue-500/30">
+                    <div>
+                        <div class="flex items-center gap-3 mb-1">
+                            <span class="bg-blue-600/10 text-blue-400 px-3 py-1 rounded-xl text-xs font-bold border border-blue-500/20">نادي #${index + 1}</span>
+                            <h3 class="text-lg font-bold text-white">${g.gymName}</h3>
+                        </div>
+                        <p class="text-xs text-slate-400">المالك: <span class="text-slate-200 font-semibold">${g.ownerName}</span> | الهاتف: <span class="text-slate-200 font-semibold">${g.phoneNumber}</span></p>
+                        <p class="text-[11px] text-slate-500 mt-1">تاريخ الإرسال: ${g.date}</p>
+                    </div>
+                    <div class="flex items-center gap-2.5 w-full md:w-auto">
+                        <button onclick="openGymReport('${g.id}')" class="flex-1 md:flex-none bg-slate-900 hover:bg-slate-800 text-blue-400 border border-slate-800 px-4 py-2.5 rounded-2xl text-xs font-bold transition">قراءة التقرير</button>
+                        <button onclick="directDownloadPDF('${g.id}')" class="flex-1 md:flex-none bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-2xl text-xs font-bold transition shadow-lg shadow-blue-600/10">تحميل PDF</button>
+                        <button onclick="deleteGymRecord('${g.id}')" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 p-2.5 rounded-2xl transition" title="حذف">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openGymReport(id) {
+            let gyms = getStoredGyms();
+            let g = gyms.find(item => item.id === id);
+            if(!g) return;
+            currentActiveGym = g;
+
+            document.getElementById('modalGymName').innerText = g.gymName;
+            document.getElementById('modalOwnerName').innerText = g.ownerName;
+            document.getElementById('modalPhone').innerText = g.phoneNumber;
+            document.getElementById('modalDate').innerText = g.date;
+
+            // Render only answered questions cleanly for PDF & Modal view
+            const container = document.getElementById('modalQuestionsContainer');
+            container.innerHTML = '';
+
+            questionsList.forEach(q => {
+                let answer = g[q.id];
+                if(answer && answer.length > 0) {
+                    container.innerHTML += `
+                        <div style="background: rgba(15, 23, 42, 0.6); padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.05);">
+                            <div style="font-weight: bold; color: #3b82f6; margin-bottom: 4px;">${q.label}</div>
+                            <div style="color: #cbd5e1; white-space: pre-line;">${answer}</div>
+                        </div>
+                    `;
+                }
+            });
+
+            document.getElementById('reportModal').classList.remove('hidden');
+            document.getElementById('reportModal').classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('reportModal').classList.remove('flex');
+            document.getElementById('reportModal').classList.add('hidden');
+        }
+
+        function directDownloadPDF(id) {
+            openGymReport(id);
+            setTimeout(() => {
+                downloadSinglePDF();
+            }, 300);
+        }
+
+        function downloadSinglePDF() {
+            const element = document.getElementById('printableArea');
+            const opt = {
+                margin:       10,
+                filename:     `تقرير_تحديات_نادي_${currentActiveGym ? currentActiveGym.gymName : 'جيم'}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().from(element).set(opt).save();
+        }
+
+        function deleteGymRecord(id) {
+            if(confirm('هل أنت متأكد من حذف هذا السجل نهائياً؟')) {
+                let gyms = getStoredGyms();
+                gyms = gyms.filter(g => g.id !== id);
+                localStorage.setItem('gyms_10_questions_survey', JSON.stringify(gyms));
+                renderOwnerDashboard();
+            }
+        }
+    </script>
+</body>
+</html>
